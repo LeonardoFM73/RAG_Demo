@@ -20,7 +20,7 @@ class EmbeddingService():
 if __name__ == "__main__":
     service = EmbeddingService()
 
-    text = "This is a test document"
+    text = "This is test document"
     embedding = service.embed(text)
 
     print(f"Text: {text}")
