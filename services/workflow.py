@@ -64,3 +64,32 @@ class RagWorkflow:
             "answer": result["answer"],
             "context": result.get("context", [])
         }
+    
+if __name__ == "__main__":
+    from embedding import EmbeddingService
+    from storage import create_document_store
+
+    # Initialize services
+    embedding_service = EmbeddingService(dimension=128)
+    document_store, _ = create_document_store(vector_size=128)
+
+    # Add sample documents
+    docs = [
+        "The capital of France is Paris.",
+        "The largest planet in our solar system is Jupiter.",
+        "The Python programming language was created by Guido van Rossum."
+    ]
+    for idx, doc in enumerate(docs):
+        embedding = embedding_service.embed(doc)
+        document_store.add_document(doc_id=idx, text=doc, embedding=embedding)
+
+    # Initialize RAG workflow
+    rag_workflow = RagWorkflow(document_store, embedding_service)
+
+    # Execute a sample question
+    question = "What is the capital of France?"
+    result = rag_workflow.execute(question)
+
+    print("Question:", result["question"])
+    print("Answer:", result["answer"])
+    print("Context Used:", result["context"])
